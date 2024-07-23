@@ -1,0 +1,28 @@
+name: build
+description: lint and build app
+
+runs:
+  using: composite
+  steps:
+    - name: setup go ${{ matrix.go-version }}
+      shell: bash
+      run: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+    - name: install deps
+      shell: bash
+      run: |
+        go version
+        go get .
+    - name: build
+      shell: bash
+      run: |
+        go build -v ./..
+    - name: lint
+      shell: bash
+      run: |
+        go vet ./..
+    - name: format
+      shell: bash
+      run: |
+       go fmt ./..
